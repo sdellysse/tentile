@@ -1,0 +1,3 @@
+[submodule "vendor/virtual-desktop-accessor"]
+	path = vendor/virtual-desktop-accessor
+	url = https://github.com/Ciantic/VirtualDesktopAccessor.git
