@@ -21,4 +21,8 @@ class VirtualDesktopAccessor {
     Utility.debug("VirtualDesktopAccessor.MoveWindowToDesktopNumber; w=" . w . "; n=" . n)
     return DllCall(this.dllPath . "\MoveWindowToDesktopNumber", Int, w, Int, n)
   }
+
+  RegisterPostMessageHook(listener, offset) {
+    return DllCall(this.dllPath . "\RegisterPostMessageHook", Int, listener, Int, offset)
+  }
 }

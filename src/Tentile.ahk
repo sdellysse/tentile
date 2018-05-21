@@ -10,15 +10,38 @@ class Tentile {
     }
   }
 
+  class FooEvent {
+    __New(tentile, event_name) {
+      this.tentile := tentile
+      this.event_name := event_name
+    }
+
+    Call(wParam, lParam, msg, hwnd) {
+      this.tentile._event_received(this.event_name, wParam, lParam, msg, hwnd)
+    }
+  }
+
   __New() {
-    OnMessage(DllCall("RegisterWindowMessage", Str, "TaskbarCreated"), "Tentile.Messages.WM_TASKBARCREATED")
+    OnMessage(DllCall("RegisterWindowMessage", Str, "TaskbarCreated"), new Tentile.FooEvent(this, "TaskbarCreated"))
 
     this.vda := new VirtualDesktopAccessor(A_LineFile . "\..\..\vendor\virtual-desktop-accessor\x64\Release\VirtualDesktopAccessor.dll")
-    Utility.debug("new instance created")
 
-    for i, id in WinGetList() {
-      Window.remove_minmax(id)
-    }
+		this.vda.RegisterPostMessageHook(hwnd, 0x1400 + 30)
+		OnMessage(0x1400 + 30, new Tentile.FooEvent(this, "VirtualDesktopAccessor.PostMessageHook"))
+
+    Utility.debug("new instance created")
+  }
+
+  _event_received(name, wParam, lParam, msg, hwnd) {
+		Utility.debug("Event(" . name . "); wParam=" . wParam . "; lParam=" . lParam . "; msg=" . msg . "; hwnd=" . hwnd . ";")
+
+		if (false) {
+
+		} else if (name = "TaskbarCreated") {
+			Reload
+
+		} else if (name = "VirtualDesktopAccessor.PostMessageHook") {
+		}
   }
 
   focus_desktop(n) {
